@@ -1,6 +1,6 @@
 
 public class RatNum {
-	int numerator; int denominator; int divider;
+	int numerator; int denominator; int divider; double doublevalue;
 	public RatNum(){
 	this.numerator = 0; 
 	this.denominator = 1;
@@ -28,17 +28,106 @@ public class RatNum {
 		this.numerator = aRatNum.numerator;
 		this.denominator = aRatNum.denominator;
 	}
+	public RatNum(String s){
+		RatNum PRatNum;
+		PRatNum = parse(s);
+		
+		this.numerator = PRatNum.numerator;
+		this.denominator = PRatNum.denominator;
+	}
 	
-	
-	public int getNumerator(){
+	public int getNumerator(){ //klar
 		return numerator;
 	}
-	public int getDenominator(){
+	public int getDenominator(){ //klar
 		return denominator;
 	}
-
+	public String toString(){ //klar
+		int heltal = 0; int numTemp = this.numerator; int denTemp = this.denominator;
+		boolean negative = false;
+		if (numTemp < 0){
+			numTemp *= -1;
+			negative = true;
+		}
+		while (numTemp > denTemp ){
+			numTemp -= denTemp;
+			heltal += 1;
+		} 
+		if (heltal != 0 ){
+			if ( negative ) {
+				heltal *= -1;
+				return heltal + " " + numTemp + "/" + denTemp;
+			}else{
+				return heltal + " " + numTemp + "/" + denTemp;
+			}
+		}else{
+			if ( negative) {
+				numTemp *= -1;
+			}
+			return numTemp + "/" + denTemp;
+		}
+	}
+	public double toDouble(){ //klar
+		doublevalue = (double)this.numerator/this.denominator;
+		System.out.println(doublevalue);
+		return doublevalue;
+	}
+	public boolean lessThan(RatNum r){// klar <--- Testa?
+		return ( (this.numerator * r.denominator) < ( r.numerator * this.denominator) );
+	}
+	public boolean equals(Object obj){ //klar
+		if (obj instanceof RatNum){
+			RatNum r = (RatNum)obj;
+			return ( ( this.numerator == r.numerator ) && ( this.denominator == r.denominator) );
+		}else{
+			return false;
+		}
+	}
 	
-	public static int gcd(int a, int b){
+	public RatNum add(RatNum r){ // klar
+		int newdenominator = this.denominator * r.denominator;
+		int newnumerator = ( this.numerator * r.denominator ) + ( r.numerator * this.denominator );
+		
+		RatNum RatNumA = new RatNum( newnumerator, newdenominator );
+		return RatNumA;
+	}
+	public RatNum sub(RatNum r){ // klar
+		int newdenominator = this.denominator * r.denominator;
+		int newnumerator = ( this.numerator * r.denominator ) - ( r.numerator * this.denominator );
+		
+		RatNum RatNumS = new RatNum( newnumerator, newdenominator );
+		return RatNumS;
+	}
+	public RatNum mul(RatNum r){ //Klar
+		RatNum RatNumM = new RatNum( (this.numerator * r.numerator ), 
+									(this.denominator * r.denominator ) );
+		return RatNumM;
+	}
+	public RatNum div(RatNum r){ // Klar
+				
+		RatNum RatNumD = new RatNum( (this.numerator * r.getDenominator() ), 
+									(r.getNumerator() * this.denominator ) );	
+		return RatNumD;
+	}
+	
+ 	public static RatNum parse(String s){ // INTE klar
+ 		int numer; int denom;
+ 		int indOfSlash = s.indexOf('/');
+ 		
+ 		if (indOfSlash == -1 ){
+ 			return new RatNum(Integer.parseInt(s));
+ 		}
+ 		try {
+ 		numer = Integer.parseInt(s.substring(0, indOfSlash));
+ 		denom = Integer.parseInt(s.substring(indOfSlash + 1, s.length()));
+ 		} catch (NumberFormatException e){
+ 			throw new NumberFormatException("Input as a/b, a/-b, -a/b or a");	
+ 		}
+ 		
+ 		return new RatNum(numer,denom);
+	}
+		
+	public static int gcd(int a, int b){ //klar
 
 		int high; int low; int rest = 1;
 		if ( a == 0 && b == 0 ){
@@ -68,7 +157,7 @@ public class RatNum {
 		}
 		
 		return high;
-	} 
-	
+	 
+	}
 	
 }
